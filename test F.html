@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نموذج إدخال المشتريات</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: right;
+            margin: 20px;
+        }
+        form {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 2px 2px 12px #aaa;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h2>نموذج إدخال المشتريات</h2>
+    <form id="purchaseForm">
+        <label for="storeName">اسم المحل:</label>
+        <input type="text" id="storeName" name="storeName" required>
+        
+        <label for="representativeName">اسم المندوب:</label>
+        <input type="text" id="representativeName" name="representativeName" required>
+        
+        <label for="doctorList">اسم الطبيب القريب:</label>
+        <div id="doctor-list">
+            <input type="text" name="doctorName[]" required>
+        </div>
+        <button type="button" id="addDoctor">إضافة طبيب آخر</button>
+        
+        <label for="image">إرفاق صور:</label>
+        <input type="file" id="image" name="image[]" accept="image/*" multiple required>
+        
+        <div id="product-list">
+            <div class="product-item">
+                <label for="type">نوع المنتج:</label>
+                <select name="type[]" required>
+                    <option value="">اختر نوع المنتج</option>
+                    <option value="S1 400">S1 400</option>
+                    <option value="S1 900">S1 900</option>
+                    <option value="S2 400">S2 400</option>
+                    <option value="S2 900">S2 900</option>
+                    <option value="S3 400">S3 400</option>
+                    <option value="S3 900">S3 900</option>
+                    <option value="S3 1.7">S3 1.7</option>
+                    <option value="LF">LF</option>
+                    <option value="Comfort">Comfort</option>
+                    <option value="Pre">Pre</option>
+                    <option value="EvoSure">EvoSure</option>
+                    <option value="AR">AR</option>
+                </select>
+                
+                <label for="quantity">الكمية:</label>
+                <input type="number" name="quantity[]" required>
+            </div>
+        </div>
+        
+        <button type="button" id="addProduct">إضافة منتج آخر</button>
+        <input type="hidden" id="timestamp" name="timestamp">
+        <button type="submit">إرسال</button>
+    </form>
+
+    <script>
+        const motivationalMessages = [
+            "أحسنت! جهدك اليوم يُحدث فرقًا.",
+            "عمل رائع! استمر في التميز.",
+            "أداءك الاحترافي يعكس التزامك.",
+            "نجاحك هو نجاح الفريق بأكمله.",
+            "تستحق كل التقدير على جهدك!",
+            "إبداعك يرفع من مستوى العمل.",
+            "جهدك لا يمر دون ملاحظة!",
+            "استمر، النجاح في طريقك!",
+            "تقديرًا لجهدك، نحن ممتنون لك.",
+            "خطوة إضافية منك تساوي نجاحًا أكبر.",
+            "ثقتنا بك تزداد يومًا بعد يوم.",
+            "كن دائمًا الأفضل، وأنت كذلك!",
+            "شكرًا لمساهمتك الفعالة!",
+            "كل جهد تبذله ينعكس إيجابيًا.",
+            "أنت عنصر أساسي في نجاحنا.",
+            "إنجازك اليومي يصنع الفرق!",
+            "احترافك ملهم للجميع.",
+            "جهودك تبني المستقبل!",
+            "لا شيء يضاهي حماسك وتفانيك!",
+            "معك نصل لأعلى المستويات!"
+        ];
+
+        document.getElementById('addDoctor').addEventListener('click', function() {
+            const doctorList = document.getElementById('doctor-list');
+            const newDoctor = document.createElement('input');
+            newDoctor.type = "text";
+            newDoctor.name = "doctorName[]";
+            newDoctor.required = true;
+            doctorList.appendChild(newDoctor);
+        });
+
+        document.getElementById('addProduct').addEventListener('click', function() {
+            const productList = document.getElementById('product-list');
+            const newProduct = document.createElement('div');
+            newProduct.classList.add('product-item');
+            newProduct.innerHTML = `
+                <label for="type">نوع المنتج:</label>
+                <select name="type[]" required>
+                    <option value="">اختر نوع المنتج</option>
+                    <option value="S1 400">S1 400</option>
+                    <option value="S1 900">S1 900</option>
+                    <option value="S2 400">S2 400</option>
+                    <option value="S2 900">S2 900</option>
+                    <option value="S3 400">S3 400</option>
+                    <option value="S3 900">S3 900</option>
+                    <option value="S3 1.7">S3 1.7</option>
+                    <option value="LF">LF</option>
+                    <option value="Comfort">Comfort</option>
+                    <option value="Pre">Pre</option>
+                    <option value="EvoSure">EvoSure</option>
+                    <option value="AR">AR</option>
+                </select>
+                
+                <label for="quantity">الكمية:</label>
+                <input type="number" name="quantity[]" required>
+            `;
+            productList.appendChild(newProduct);
+        });
+
+        document.getElementById('purchaseForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    
+    const timestamp = new Date().toLocaleString('ar-EG');
+    document.getElementById('timestamp').value = timestamp;
+
+    const formData = new FormData();
+
+    formData.append("storeName", document.getElementById("storeName").value);
+    formData.append("representativeName", document.getElementById("representativeName").value);
+    formData.append("timestamp", timestamp);
+
+    // تجميع أسماء الأطباء في قائمة واحدة وإرسالها
+    let doctorNames = [];
+    document.querySelectorAll('input[name="doctorName[]"]').forEach(doctor => {
+        doctorNames.push(doctor.value);
+    });
+    formData.append("doctorNames", doctorNames.join(", "));
+
+    // تجميع المنتجات وإرسالها بشكل صحيح
+    let productTypes = [];
+    let quantities = [];
+    document.querySelectorAll('.product-item').forEach(item => {
+        let productType = item.querySelector('select[name="type[]"]').value;
+        let quantity = item.querySelector('input[name="quantity[]"]').value;
+        
+        if (productType && quantity) {
+            productTypes.push(productType);
+            quantities.push(quantity);
+        }
+    });
+
+    if (productTypes.length === 0 || quantities.length === 0) {
+        alert("⚠ يرجى إدخال جميع بيانات المنتجات قبل الإرسال!");
+        return;
+    }
+
+    formData.append("productTypes", JSON.stringify(productTypes));
+    formData.append("quantities", JSON.stringify(quantities));
+
+    // إرسال الصور باستخدام FileReader لتحويلها إلى Base64
+    const images = document.getElementById("image").files;
+    let imagePromises = [];
+    for (let i = 0; i < images.length; i++) {
+        let file = images[i];
+        let reader = new FileReader();
+
+        let promise = new Promise((resolve) => {
+            reader.onloadend = function () {
+                resolve({
+                    name: file.name,
+                    type: file.type,
+                    data: reader.result.split(',')[1] // تحويل الصورة إلى Base64 بدون header
+                });
+            };
+            reader.readAsDataURL(file);
+        });
+        imagePromises.push(promise);
+    }
+
+    Promise.all(imagePromises).then(async (encodedImages) => {
+        formData.append("images", JSON.stringify(encodedImages));
+
+        try {
+            const response = await fetch('https://script.google.com/macros/s/AKfycbxMFkl48okCIbGeQF2526UZg8-QlKoPzM4f2Y8o46xDuxqCpFzaYB6a92DyoHA7UcSKRQ/exec', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.text();
+            
+            if (result.includes("Success")) {
+                const randomMessage = motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)];
+                alert(`تم إرسال البيانات بنجاح!\n\n${randomMessage}\n\nتحياتي،\nعلي عبود`);
+                document.getElementById('purchaseForm').reset();
+            } else {
+                alert(`⚠ حدث خطأ أثناء الإرسال: ${result}`);
+            }
+        } catch (error) {
+            alert(`❌ خطأ في الاتصال: ${error.message}`);
+        }
+    });
+});
+
+
+
+    </script>
+</body>
+</html>
